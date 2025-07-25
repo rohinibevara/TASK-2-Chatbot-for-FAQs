@@ -1,0 +1,12 @@
+[
+  {"q": "What is ChatGPT?", "a": "ChatGPT is an AI chatbot developed by OpenAI, based on GPT‑3.5 and fine­tuned with RLHF to handle conversational tasks."},
+  {"q": "How does ChatGPT work?", "a": "It predicts text based on patterns learned during training and is optimized for dialogue using reinforcement learning from human feedback."},
+  {"q": "Is ChatGPT free?", "a": "A free tier offers GPT‑4o‑mini and limited GPT‑4o access. Paid plans like ChatGPT Plus (~$20/mo), Pro and Teams offer more features and limits."},
+  {"q": "What are ChatGPT’s limitations?", "a": "Common issues include outdated information, hallucinations (made‑up content), and lack of memory or web connectivity."},
+  {"q": "What is hallucination in ChatGPT?", "a": "Hallucination refers to when ChatGPT generates incorrect or fictional information—sometimes nearly half of its references may be fabricated."},
+  {"q": "Can ChatGPT browse the web?", "a": "Not by default. Unless enriched with browsing plugins or agents, it cannot fetch real‑time data."},
+  {"q": "What are GPTs?", "a": "GPTs are custom versions of ChatGPT tailored for specific purposes. Creating GPTs requires a paid plan; free users can only use existing ones."},
+  {"q": "Which new models are available in ChatGPT?", "a": "OpenAI launched o4‑mini and o4‑mini‑high in April 2025. These are accessible depending on your subscription plan."},
+  {"q": "What is the ChatGPT Agent?", "a": "A newly introduced autonomous assistant layer on GPT‑4o that can perform tasks like browsing, file manipulation, form‑filling, and API use with consent."},
+  {"q": "Is ChatGPT safe to use professionally?", "a": "Useful for various tasks, but you should verify its outputs due to potential hallucinations, bias, and privacy risks."}
+]
