@@ -1,29 +1,44 @@
-faqs = [
-    {"question": "What is ChatGPT?", "answer": "ChatGPT is an AI chatbot developed by OpenAI..."},
-    {"question": "Is ChatGPT free?", "answer": "Yes, there is a free tier with GPT‑4o‑mini..."},
-    # ... more Q-A pairs
-]
+# faq_chatbot.py
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
+# 1. Define your FAQ dataset
+faqs = [
+    {"question": "What is ChatGPT?", "answer": "ChatGPT is an AI chatbot developed by OpenAI."},
+    {"question": "Is ChatGPT free?", "answer": "Yes, the ChatGPT 3.5 tier is free; paid plans unlock GPT‑4 access."},
+    {"question": "Can ChatGPT access the internet?", "answer": "No—ChatGPT doesn’t browse the web unless plugins or agents are enabled."},
+    # Add more Q&A pairs here
+]
+
 questions = [f["question"] for f in faqs]
 
+# 2. Build the TF-IDF vectorizer and fit to FAQ questions
 vectorizer = TfidfVectorizer(stop_words="english")
 faq_vectors = vectorizer.fit_transform(questions)
 
-def find_best_faq(user_query, threshold=0.3):
+# 3. Function to find best matching answer based on similarity
+def get_best_faq_answer(user_query, threshold=0.3):
     query_vec = vectorizer.transform([user_query])
     sims = cosine_similarity(query_vec, faq_vectors)[0]
     best_idx = sims.argmax()
     best_score = sims[best_idx]
     if best_score >= threshold:
         return faqs[best_idx]["answer"], best_score
-    else:
-        return None, best_score
-user = "Is ChatGPT available for free usage?"
-answer, score = find_best_faq(user)
+    return None, best_score
 
-if answer:
-    print(f"Best match (score={score:.2f}): {answer}")
-else:
-    print(f"No match found (top similarity was {score:.2f})")
+# 4. Chatbot loop: match user input and display response
+def chatbot():
+    print("FAQ Chatbot (type 'quit' to exit)")
+    while True:
+        user_input = input("You: ").strip()
+        if user_input.lower() in ("quit", "exit"):
+            print("Chatbot: Goodbye!")
+            break
+        answer, score = get_best_faq_answer(user_input)
+        if answer:
+            print(f"Chatbot: {answer} (matched score: {score:.2f})")
+        else:
+            print(f"Chatbot: Sorry, I couldn't find an appropriate answer. (top score: {score:.2f})")
+
+if __name__ == "__main__":
+    chatbot()
