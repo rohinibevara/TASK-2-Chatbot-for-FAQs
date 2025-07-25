@@ -1,0 +1,29 @@
+faqs = [
+    {"question": "What is ChatGPT?", "answer": "ChatGPT is an AI chatbot developed by OpenAI..."},
+    {"question": "Is ChatGPT free?", "answer": "Yes, there is a free tier with GPT‑4o‑mini..."},
+    # ... more Q-A pairs
+]
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+questions = [f["question"] for f in faqs]
+
+vectorizer = TfidfVectorizer(stop_words="english")
+faq_vectors = vectorizer.fit_transform(questions)
+
+def find_best_faq(user_query, threshold=0.3):
+    query_vec = vectorizer.transform([user_query])
+    sims = cosine_similarity(query_vec, faq_vectors)[0]
+    best_idx = sims.argmax()
+    best_score = sims[best_idx]
+    if best_score >= threshold:
+        return faqs[best_idx]["answer"], best_score
+    else:
+        return None, best_score
+user = "Is ChatGPT available for free usage?"
+answer, score = find_best_faq(user)
+
+if answer:
+    print(f"Best match (score={score:.2f}): {answer}")
+else:
+    print(f"No match found (top similarity was {score:.2f})")
