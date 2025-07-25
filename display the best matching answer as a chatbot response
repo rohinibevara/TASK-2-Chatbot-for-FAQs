@@ -1,0 +1,46 @@
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+
+# 1. Prepare your FAQs
+faqs = [
+    {"q": "What is ChatGPT?", "a": "ChatGPT is an AI chatbot developed by OpenAI."},
+    {"q": "Is ChatGPT free?", "a": "Yes, ChatGPT 3.5 is free. Paid plans unlock GPT‑4 access."},
+    {"q": "Can ChatGPT browse the web?", "a": "No—ChatGPT does not access real-time web data unless enabled via specific plugins."},
+    # Add more FAQs...
+]
+
+questions = [f["q"] for f in faqs]
+
+# 2. Load sentence-transformer model
+model = SentenceTransformer('all-MiniLM-L6-v2')
+
+# Precompute embeddings for FAQ questions
+faq_embeddings = model.encode(questions, normalize_embeddings=True)
+
+# 3. Function to match user query to best FAQ
+def get_best_response(user_query, threshold=0.5):
+    query_embed = model.encode([user_query], normalize_embeddings=True)
+    similarities = cosine_similarity(query_embed, faq_embeddings)[0]
+    best_idx = similarities.argmax()
+    score = similarities[best_idx]
+    if score >= threshold:
+        return faqs[best_idx]["a"], score
+    else:
+        return None, score
+
+# 4. Simulate chat responses
+def chatbot_reply(user_query):
+    answer, sim_score = get_best_response(user_query, threshold=0.4)
+    if answer:
+        return f"🤖 {answer} (matched with score {sim_score:.2f})"
+    else:
+        return "🤖 Sorry, I couldn't find the answer to that. Can you rephrase?"
+
+# Example:
+if __name__ == "__main__":
+    while True:
+        user = input("You: ")
+        if user.lower() in ("quit", "exit"):
+            print("Chatbot: Goodbye!")
+            break
+        print(chatbot_reply(user))
