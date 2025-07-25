@@ -1,0 +1,35 @@
+import re
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+
+# Ensure required data
+nltk.download('punkt')
+nltk.download('stopwords')
+nltk.download('wordnet')
+
+def preprocess_nltk(text):
+    # 1. Lowercase
+    text = text.lower()
+
+    # 2. Remove URLs
+    text = re.sub(r"https?://\S+", "", text)
+    # 3. Remove punctuation
+    text = re.sub(r"[^\w\s]", "", text)
+    # 4. Tokenize
+    tokens = word_tokenize(text)
+    # 5. Remove stopwords
+    stops = set(stopwords.words('english'))
+    tokens = [t for t in tokens if t not in stops]
+    # 6. Remove short tokens (like single characters)
+    tokens = [t for t in tokens if len(t) > 1]
+    # 7. Lemmatize
+    lemmatizer = WordNetLemmatizer()
+    tokens = [lemmatizer.lemmatize(t) for t in tokens]
+
+    return tokens
+
+# Example
+faq = "What is ChatGPT? ChatGPT is developed by OpenAI to generate human‑like responses."
+print(preprocess_nltk(faq))
